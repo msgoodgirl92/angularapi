@@ -1,0 +1,17 @@
+{
+    "name": "backend-server",
+    "version": "1.0.0",
+    "description": "Simple real backend for users",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "body-parser": "^1.20.2",
+        "cors": "^2.8.5",
+        "express": "^4.21.2",
+        "fs-extra": "^11.1.1",
+        "json-server": "^1.0.0-beta.3",
+        "pdfkit": "^0.17.1"
+    }
+}
