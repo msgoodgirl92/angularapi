@@ -20,8 +20,19 @@ const dbPath = './db.json';
 
 function loadData() {
   const filePath = path.join(__dirname, 'db.json');
-  const data = fs.readFileSync(filePath);
-  return JSON.parse(data);
+
+  if (!fs.existsSync(filePath)) {
+    console.error('❌ db.json ne postoji na putanji:', filePath);
+    return { boeData: [], employeeList: [], rejectList: [], users: [] };
+  }
+
+  try {
+    const data = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('❌ Greška prilikom čitanja db.json:', err.message);
+    return { boeData: [], employeeList: [], rejectList: [], users: [] };
+  }
 }
 
 const getUsers = () => {
@@ -47,6 +58,34 @@ app.get('/users', (req, res) => {
   const users = getUsers();
   res.json(users);
 });
+app.get('/users/:id', (req, res) => {
+  const users = getUsers();
+  const id = Number(req.params.id);
+  const user = users.find(u => u.id === id);
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ message: 'Korisnik nije pronađen' });
+  }
+});
+app.get('/HBSharedAPI/BillOfExchangeRecordsAPI/boeData/:id', (req, res) => {
+  const data = loadData();
+  const id = Number(req.params.id);
+
+  if (!data.boeData) {
+    return res.status(404).json({ message: 'Nema podataka' });
+  }
+
+  const record = data.boeData.find(item => Number(item.ID) === id);
+
+  if (!record) {
+    return res.status(404).json({ message: 'Zapis nije pronađen' });
+  }
+
+  res.json(record);
+});
+
 
 app.get('/HBSharedAPI/BillOfExchangeRecordsAPI/boeData', (req, res) => {
   const serijskibroj = req.query.serijskibroj;
@@ -126,6 +165,11 @@ app.post('/HBSharedAPI/BillOfExchangeRecordsAPI/GetBOERecords', (req, res) => {
   const filters = req.body; // prima ceo objekat filtera
   const data = loadData();
   let filteredData = data.boeData || [];
+
+    // filtriraj po ID
+if (filters.ID) {
+    filteredData = filteredData.filter(item => item.ID === Number(filters.ID));
+  }
 
   // filtriraj po serijskom broju
   if (filters.serialNumber) {
@@ -216,7 +260,23 @@ app.post('/api/DocumentDownload/GetReport', (req, res) => {
   doc.end();
 });
 
-// ------------------ POKRETANJE ------------------
-app.listen(port, () => {
-  console.log(`Server radi na http://localhost:${port}`);
+app.get('/debug/dbjson', (req, res) => {
+  try {
+    const data = loadData();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Ne mogu da učitam db.json', details: error.message });
+  }
 });
+
+
+
+app.get('/test', (req, res) => {
+  res.send('Test ruta radi! 🚀');
+});
+
+// ------------------ POKRETANJE ------------------
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server radi na portu ${port}`);
+});
+
