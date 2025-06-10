@@ -1,0 +1,182 @@
+<div class="language-switcher" style="text-align:right; margin: 10px;">
+  <button mat-icon-button (click)="changeLanguage('sr')" [disabled]="currentLang === 'sr'" matTooltip="Srpski">
+    <img src="https://hatscripts.github.io/circle-flags/flags/rs.svg" alt="Srpski" width="24" height="24" />
+  </button>
+  <button mat-icon-button (click)="changeLanguage('en')" [disabled]="currentLang === 'en'" matTooltip="English">
+    <img src="https://hatscripts.github.io/circle-flags/flags/gb.svg" alt="English" width="24" height="24" />
+  </button>
+</div>
+
+
+<div class="form-wrapper">
+  <h1>{{ t('title') }}</h1>
+  <br />
+  <div class="heading" *ngIf="!isFilterSelected">
+    {{ t('filterMessage') }}
+  </div>
+  <br />
+  <form class="form-grid" (ngSubmit)="$event.preventDefault()">
+
+    <!-- ID broj -->
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>{{ t('idLabel') }}</mat-label>
+      <input
+        matInput
+        placeholder="{{ t('idPlaceholder') }}"
+        [formControl]="idControl"
+        (ngModelChange)="applyFilters()"
+        autocomplete="off" />
+    </mat-form-field>
+
+    <!-- Razlog odbijanja -->
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>{{ t('rejectionLabel') }}</mat-label>
+      <input
+        matInput
+        [formControl]="rejectionControl"
+        [matAutocomplete]="rejectionAuto"
+        (focus)="loadRejectionReasons()"
+        autocomplete="off" />
+
+      <button mat-icon-button matSuffix tabindex="-1" aria-label="Otvori listu">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+
+     <mat-autocomplete #rejectionAuto="matAutocomplete" [displayWith]="displayRejection.bind(this)">
+  <mat-option *ngFor="let reason of filteredRejectionReasons | async" [value]="reason">
+    {{ translateRejectionReason(reason.reason) }}
+  </mat-option>
+</mat-autocomplete>
+    </mat-form-field>
+
+    <!-- Datum prijema -->
+<mat-form-field appearance="fill" class="form-field">
+  <mat-label>{{ t('dateLabel') }}</mat-label>
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [(ngModel)]="selectedDate"
+    name="selectedDate"
+    (dateChange)="applyFilters()"
+    autocomplete="off" />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+<mat-datepicker #picker [dateClass]="dateClass"></mat-datepicker>
+</mat-form-field>
+
+
+    <!-- Zaposleni -->
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>{{ t('employeeLabel') }}</mat-label>
+      <input
+        matInput
+        [formControl]="employeeControl"
+        [matAutocomplete]="employeeAuto"
+        (focus)="loadEmployeeList()"
+        autocomplete="off" />
+
+      <button mat-icon-button matSuffix tabindex="-1" aria-label="Otvori listu">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+
+      <mat-autocomplete #employeeAuto="matAutocomplete" [displayWith]="displayEmployee.bind(this)">
+        <mat-option *ngFor="let emp of filteredEmployees | async" [value]="emp">
+          {{ emp.firstName }} {{ emp.lastName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+
+  <div class="buttonrefresh">
+  <button mat-raised-button color="primary" (click)="resetForm()">
+  <mat-icon>refresh</mat-icon> {{ t('Refresh') }}
+</button>
+  </div>
+  <br />
+
+  <div class="button-group">
+    <button
+      mat-raised-button
+      color="primary"
+      class="wide-button"
+      (click)="fetchData()"
+      [disabled]="loading"
+    >
+      <mat-icon>filter_list</mat-icon>
+        {{ t('filterButton') }}
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="wide-button"
+      (click)="showAllData()"
+    >
+      <mat-icon>description</mat-icon>
+        {{ t('showAllButton') }}
+      </button>
+
+    <button
+      mat-raised-button
+      color="accent"
+      class="wide-button"
+      *ngIf="showAddUserButton"
+      (click)="addNewUser()"
+      [disabled]="loading"
+    >
+      ➕ Dodaj novog korisnika
+    </button>
+  </div>
+
+  <br /><br /><br /><br />
+
+<table *ngIf="isFilterSelected && filteredBoeData.length > 0" class="data-table">
+  <thead>
+    <tr>
+      <th>{{ t('idLabel') }}</th>
+      <th>{{ t('serialNumberLabel') }}</th>
+      <th>{{ t('Creditor') }}</th>
+      <th>{{ t('Debtor') }}</th>
+      <th>{{ t('dateLabel') }}</th>
+      <th>{{ t('issueDateLabel') }}</th>
+      <th>{{ t('employeeLabel') }}</th>
+      <th>{{ t('rejectionLabel') }}</th>
+      <th>{{ t('actionLabel') }}</th>
+      <th>{{ t('pdfDownloadLabel') }}</th>
+    </tr>
+  </thead>
+    <tbody>
+      <tr *ngFor="let item of filteredBoeData; let i = index">
+        <td>{{ item.ID }}</td>
+        <td>{{ item.serijskibroj }}</td>
+        <td>{{ item.poverilac }}</td>
+        <td>{{ item.duznik }}</td>
+        <td>{{ item.datumPrijema }}</td>
+        <td>{{ item.datumIzdavanja }}</td>
+        <td>{{ item.createdBy }}</td>
+        <td>{{ item.rejectionReason ? translateRejectionReason(item.rejectionReason) : '-' }}</td>
+        <td class="action-cell">
+          <button
+            mat-icon-button
+            color="warn"
+            aria-label="Izbriši"
+            (click)="deleteItem(item.ID)"
+            [disabled]="loading"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </td>
+
+        <td class="action-cell">
+          <button
+            mat-icon-button
+            color="primary"
+            aria-label="Preuzmi PDF"
+            (click)="downloadAsPDF(item)"
+          >
+            <mat-icon>download</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,95 @@
+<h2 mat-dialog-title>Dodaj novi zapis</h2>
+
+<form [formGroup]="userForm" (ngSubmit)="onSave()" class="user-form">
+
+  <mat-form-field appearance="fill" class="full-width">
+    <input matInput formControlName="serijskibroj" placeholder="Unesite serijski broj" />
+    <mat-error *ngIf="userForm.get('serijskibroj')?.hasError('required')">
+      Serijski broj je obavezan.
+    </mat-error>
+    <mat-error *ngIf="userForm.get('serijskibroj')?.hasError('serialExists')">
+      Serijski broj je već u upotrebi.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Poverilac</mat-label>
+    <input matInput formControlName="poverilac" />
+    <mat-error *ngIf="userForm.controls['poverilac'].hasError('required')">
+      Poverilac je obavezan
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Dužnik</mat-label>
+    <input matInput formControlName="duznik" />
+    <mat-error *ngIf="userForm.controls['duznik'].hasError('required')">
+      Dužnik je obavezan
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Ostala polja... -->
+
+
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Razlog odbijanja</mat-label>
+    <input
+      matInput
+      #rejectionAutoTrigger="matAutocompleteTrigger"
+      [formControl]="rejectionReasonControl"
+      [matAutocomplete]="rejectionAuto"
+      (focus)="openRejectionAutocomplete()"
+      (click)="openRejectionAutocomplete()"
+    />
+
+    <mat-autocomplete #rejectionAuto="matAutocomplete" [displayWith]="displayRejection">
+      <mat-option *ngFor="let reason of filteredRejectionReasons | async" [value]="reason">
+        {{ reason.reason }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+
+
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Datum prijema</mat-label>
+    <input matInput type="date" formControlName="datumPrijema" />
+    <mat-error *ngIf="userForm.controls['datumPrijema'].hasError('required')">
+      Datum prijema je obavezan
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Datum izdavanja</mat-label>
+    <input matInput type="date" formControlName="datumIzdavanja" />
+    <mat-error *ngIf="userForm.controls['datumIzdavanja'].hasError('required')">
+      Datum izdavanja je obavezan
+    </mat-error>
+  </mat-form-field>
+
+ <mat-form-field>
+   <mat-label>Zaposleni</mat-label>
+  <input
+    matInput
+    formControlName="createdBy"
+    [matAutocomplete]="autoEmployee"
+    #employeeAutoTrigger="matAutocompleteTrigger"
+    (focus)="openEmployeeAutocomplete()"
+  />
+  <mat-autocomplete #autoEmployee="matAutocomplete" [displayWith]="displayEmployee.bind(this)">
+    <mat-option *ngFor="let empName of filteredEmployees | async" [value]="empName">
+      {{ empName }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+  <div class="button-group">
+    <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid || loading">
+      Sačuvaj
+    </button>
+    <button mat-raised-button color="warn" type="button" (click)="onCancel()">
+      Otkaži
+    </button>
+  </div>
+</form>
