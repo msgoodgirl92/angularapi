@@ -1,0 +1,43 @@
+<mat-toolbar color="primary" class="navbar">
+  <div class="logo" (click)="navigateHome()">
+    <span class="logo-text">DV</span>
+  </div>
+  <span class="spacer"></span>
+
+  <!-- Hamburger Menu Button -->
+  <button mat-icon-button class="menu-button" (click)="toggleMobileMenu()">
+    <div class="hamburger" [class.active]="isMobileMenuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </button>
+</mat-toolbar>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu" [class.active]="isMobileMenuOpen">
+  <nav class="mobile-nav-links">
+    <button mat-button (click)="navigateTo('')">
+      <mat-icon>home</mat-icon>
+      Home
+    </button>
+    <button mat-button (click)="navigateTo('projects')">
+      <mat-icon>work</mat-icon>
+      Projects
+    </button>
+    <button mat-button (click)="navigateTo('about')">
+      <mat-icon>person</mat-icon>
+      About Me
+    </button>
+    <button mat-button (click)="navigateTo('contact')">
+      <mat-icon>mail</mat-icon>
+      Contact
+    </button>
+  </nav>
+</div>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer></app-footer>

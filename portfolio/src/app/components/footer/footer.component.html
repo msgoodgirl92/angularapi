@@ -1,0 +1,53 @@
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <div class="footer-logo">
+        <span class="logo-text">DV</span>
+      </div>
+      <p class="footer-description">
+        Frontend Developer passionate about creating beautiful and functional web experiences.
+      </p>
+      <div class="social-links">
+        <a *ngFor="let link of socialLinks"
+           [href]="link.url"
+           target="_blank"
+           class="social-link"
+           rel="noopener noreferrer">
+          <mat-icon>{{ link.icon }}</mat-icon>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <nav class="footer-nav">
+        <a *ngFor="let link of quickLinks"
+           [routerLink]="link.path"
+           class="footer-link">
+          {{ link.name }}
+        </a>
+      </nav>
+    </div>
+
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <div class="contact-info">
+        <div class="contact-item">
+          <mat-icon>email</mat-icon>
+          <span>desanka&#64;email.com</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>location_on</mat-icon>
+          <span>Belgrade, Serbia</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {{ currentYear }} Desanka Vukovic. All rights reserved.</p>
+    <p class="made-with">
+      Made with <mat-icon class="heart-icon">favorite</mat-icon> using Angular
+    </p>
+  </div>
+</footer>

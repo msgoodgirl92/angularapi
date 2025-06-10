@@ -1,0 +1,74 @@
+<app-hero></app-hero>
+
+<section class="featured-projects">
+  <div class="container">
+    <h2 class="section-title">Featured Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card" *ngFor="let project of featuredProjects">
+        <div class="project-image">
+          <img [src]="project.image" [alt]="project.title">
+          <div class="project-overlay">
+            <a [href]="project.demoUrl" target="_blank" class="project-link">Live Demo</a>
+            <a [href]="project.githubUrl" target="_blank" class="project-link">View Code</a>
+          </div>
+        </div>
+        <div class="project-content">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.description }}</p>
+          <div class="project-tech">
+            <span *ngFor="let tech of project.technologies">{{ tech }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="view-all">
+      <a routerLink="/projects" class="view-all-btn">View All Projects</a>
+    </div>
+  </div>
+</section>
+
+<section class="tech-stack">
+  <div class="container">
+    <h2 class="section-title">Tech Stack</h2>
+    <div class="tech-grid">
+      <div class="tech-item" *ngFor="let tech of techStack">
+        <div class="tech-icon">
+          <img [src]="tech.icon" [alt]="tech.name">
+        </div>
+        <h3>{{ tech.name }}</h3>
+        <p>{{ tech.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-preview">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        <h2 class="section-title">About Me</h2>
+        <p>Frontend Developer with a passion for creating beautiful and functional web experiences. I specialize in building modern web applications using Angular and other cutting-edge technologies.</p>
+        <div class="about-stats">
+          <div class="stat-item">
+            <span class="stat-number">3+</span>
+            <span class="stat-label">Years Experience</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">20+</span>
+            <span class="stat-label">Projects Completed</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">15+</span>
+            <span class="stat-label">Happy Clients</span>
+          </div>
+        </div>
+        <a routerLink="/about" class="learn-more-btn">Learn More</a>
+      </div>
+      <div class="about-image">
+        <img src="assets/images/profile.jpg" alt="Profile Image">
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
