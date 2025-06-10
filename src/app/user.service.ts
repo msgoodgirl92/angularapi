@@ -24,7 +24,7 @@ export interface RejectionReason {
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = environment.apiUrl;  // bez trailing slash u environment-u!
+  private baseUrl = environment.apiUrl; 
   private employeeUrl = `${this.baseUrl}/HBSharedAPI/BillOfExchangeRecordsAPI/GetDD?type=0`;
   private rejectionUrl = `${this.baseUrl}/HBSharedAPI/BillOfExchangeRecordsAPI/GetDD?type=1`;
   private boeUrl = `${this.baseUrl}/HBSharedAPI/BillOfExchangeRecordsAPI/boeData`;
