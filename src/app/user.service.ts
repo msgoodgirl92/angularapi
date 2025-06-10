@@ -25,9 +25,9 @@ export interface RejectionReason {
 })
 export class UserService {
   private baseUrl = environment.apiUrl; 
-  private employeeUrl = `${this.baseUrl}/HBSharedAPI/BillOfExchangeRecordsAPI/GetDD?type=0`;
-  private rejectionUrl = `${this.baseUrl}/HBSharedAPI/BillOfExchangeRecordsAPI/GetDD?type=1`;
-  private boeUrl = `${this.baseUrl}/HBSharedAPI/BillOfExchangeRecordsAPI/boeData`;
+  private employeeUrl = `${this.baseUrl}HBSharedAPI/BillOfExchangeRecordsAPI/GetDD?type=0`;
+  private rejectionUrl = `${this.baseUrl}HBSharedAPI/BillOfExchangeRecordsAPI/GetDD?type=1`;
+  private boeUrl = `${this.baseUrl}HBSharedAPI/BillOfExchangeRecordsAPI/boeData`;
 
   constructor(private http: HttpClient) {}
 
