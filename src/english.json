@@ -1,0 +1,124 @@
+{
+  "rejectList": [
+    {"id": 1, "reason": "Insufficient funds"},
+    {"id": 2, "reason": "Late payment"},
+    {"id": 3, "reason": "User blocked"}
+  ],
+  "employeeList": [
+    {"id": 1, "radnik": "Ana Mihajlović", "position": "Manager"},
+    {"id": 2, "radnik": "Ivan Radovic", "position": "Developer"},
+    {"id": 3, "radnik": "Milica Jankovic", "position": "Designer"}
+  ],
+  "boeData": [
+    {
+      "ID": 1,
+      "serijskibroj": "SB-001",
+      "duznik": "Novakovic d.o.o.",
+      "poverilac": "Bank",
+      "datumPrijema": "2025-05-10",
+      "datumIzdavanja": "2025-05-01",
+      "action": "View",
+      "createdBy": "Milica Jankovic",
+      "rejectionReason": "Insufficient funds"
+    },
+    {
+      "ID": 2,
+      "serijskibroj": "SB-002",
+      "duznik": "Milsped d.o.o.",
+      "poverilac": "Bank",
+      "datumPrijema": "2025-05-11",
+      "datumIzdavanja": "2025-05-02",
+      "action": "View",
+      "createdBy": "Ivan Radovic",
+      "rejectionReason": "User blocked"
+    },
+    {
+      "ID": 3,
+      "serijskibroj": "SB-003",
+      "duznik": "Agro Promet",
+      "poverilac": "Bank",
+      "datumPrijema": "2025-05-11",
+      "datumIzdavanja": "2025-05-02",
+      "action": "View",
+      "createdBy": "Ana Mihajlović",
+      "rejectionReason": "Late payment"
+    },
+    {
+      "serijskibroj": "SB-004",
+      "poverilac": "Bank",
+      "duznik": "Jankovic d.o.o",
+      "datumPrijema": "2026-06-12",
+      "datumIzdavanja": "2026-06-15",
+      "createdBy": "Ana Mihajlović",
+      "action": "",
+      "rejectionReason": "User blocked",
+      "ID": 4
+    },
+    {
+      "serijskibroj": "SB-005",
+      "poverilac": "Bank",
+      "duznik": "Bank",
+      "datumPrijema": "2025-04-12",
+      "datumIzdavanja": "2025-04-15",
+      "createdBy": "Ivan Radovic",
+      "action": "",
+      "rejectionReason": "Late payment",
+      "ID": 5
+    },
+    {
+      "serijskibroj": "SB-006",
+      "poverilac": "Bank",
+      "duznik": "Yettel",
+      "datumPrijema": "2024-04-12",
+      "datumIzdavanja": "2024-04-16",
+      "createdBy": "Milica Jankovic",
+      "action": "",
+      "rejectionReason": "Insufficient funds",
+      "ID": 6
+    },
+    {
+      "serijskibroj": "SB-007",
+      "poverilac": "Bank",
+      "duznik": "Jakovljevic d.o.o.",
+      "datumPrijema": "2025-05-29",
+      "datumIzdavanja": "2025-05-30",
+      "createdBy": "Ivan Radovic",
+      "action": "",
+      "rejectionReason": "Late payment",
+      "ID": 7
+    },
+    {
+      "serijskibroj": "SB-008",
+      "poverilac": "Bank",
+      "duznik": "LCW Waikiki",
+      "datumPrijema": "2025-05-12",
+      "datumIzdavanja": "2025-05-15",
+      "createdBy": "Ana Mihajlović",
+      "action": "",
+      "rejectionReason": "Insufficient funds",
+      "ID": 8
+    },
+    {
+      "serijskibroj": "SB-009",
+      "poverilac": "Bank",
+      "duznik": "Katrin doo",
+      "datumPrijema": "2025-05-14",
+      "datumIzdavanja": "2025-05-18",
+      "createdBy": "Milica Jankovic",
+      "action": "",
+      "rejectionReason": "User blocked",
+      "ID": 9
+    },
+    {
+      "serijskibroj": "SB-010",
+      "poverilac": "Bank",
+      "duznik": "Alexandar doo",
+      "datumPrijema": "2025-05-30",
+      "datumIzdavanja": "2025-05-31",
+      "createdBy": "Ivan Radovic",
+      "action": "",
+      "rejectionReason": "Late payment",
+      "ID": 10
+    }
+  ]
+}

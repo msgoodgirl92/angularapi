@@ -1,0 +1,273 @@
+:host {
+  display: block;
+  min-height: 1100px;
+  padding: 2rem;
+  box-sizing: border-box;
+
+  background: linear-gradient(135deg, #3b5b96, #112445, #3367d7, #bbc3d8);
+
+  /* Bez animacije i bez pozadinske veličine */
+  background-size: auto;
+  animation: none;
+}
+.heading {
+  text-align: center;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+
+/* Naslov stranice */
+.form-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Naslov */
+.form-wrapper h1 {
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin: 0px 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  padding-bottom: 30px;
+}
+
+/* Mreža input polja */
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+
+}
+
+/* Stil za svaki mat-form-field */
+.form-field {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: white !important;
+  border-radius: 8px;
+  padding-left: 10px;
+}
+::ng-deep .mat-form-field-appearance-fill.mat-focused .mat-form-field-flex {
+  background-color: white !important;
+  box-shadow: 0 0 0 2px #3f51b5; /* tvoja plava senka za fokus */
+}
+::ng-deep .mat-form-field-appearance-fill.mat-focused .mat-form-field-ripple {
+  background-color: transparent !important;
+}
+
+/* Dugmad */
+.button-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 15px;
+  justify-content: center;
+}
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.left-button {
+  flex: 1;
+}
+
+.center-buttons {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+button.wide-button {
+  min-width: 160px;
+  height: 48px;
+  font-size: 14px;
+  border-radius: 8px;
+  text-transform: none;
+}
+
+button[mat-raised-button][color="primary"] {
+  background-color: #3f51b5;
+  color: white;
+}
+
+button[mat-raised-button][color="primary"]:hover {
+  background-color: #283593;
+}
+
+button[mat-raised-button][color="accent"] {
+  background-color: #536dfe;
+  color: white;
+}
+
+button[mat-raised-button][color="accent"]:hover {
+  background-color: #304ffe;
+}
+
+/* Pretraga */
+input[type="text"][placeholder="Pretraga"] {
+  width: 400px;
+  max-width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1.5px solid #3f51b5;
+  border-radius: 6px;
+  margin-bottom: 25px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"][placeholder="Pretraga"]:focus {
+  border-color: #283593;
+  outline: none;
+  box-shadow: 0 0 6px rgba(40, 53, 147, 0.4);
+}
+
+/* Tabela */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(63, 81, 181, 0.15);
+  font-size: 14px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.data-table th {
+  background-color: #3f51b5;
+  color: white;
+  font-weight: 600;
+  user-select: none;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background-color: #f5f7ff;
+}
+
+.data-table tbody tr:hover {
+  background-color: #e3e9ff;
+}
+
+.action-cell {
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+}
+
+.action-cell button {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  min-width: 0;
+  padding: 0;
+  color: #283593;
+}
+
+.action-cell button:hover {
+  background-color: #c5cae9;
+}
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Spinner overlay */
+
+.loading-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+::ng-deep .custom-icon {
+  color: #536dfe !important;
+}
+::ng-deep .mat-datepicker-toggle-default-icon {
+  color: #536dfe !important;
+}
+/* Responsive */
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+  .column {
+    min-width: 100%;
+  }
+  input[type="text"][placeholder="Pretraga"] {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Forma na mobilnim ide jedna ispod druge */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Dugmad šire na celu širinu */
+  .wide-button {
+    width: 100%;
+  }
+
+  /* Tabela skroluje horizontalno */
+  .data-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  /* Sve ćelije ne prekidaju tekst */
+  .data-table th, .data-table td {
+    white-space: normal;
+  }
+}
+.highlighted-date .mat-calendar-body-cell-content {
+  background-color: #e21b0d;  /* svetlo narandžasta pozadina */
+  border-radius: 50%;
+  color: black;
+  font-weight: bold;
+}
+.highlighted-date {
+  background-color: #ffcc80 !important;
+  border-radius: 50% !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+.mat-calendar-body-cell.highlighted-date .mat-calendar-body-cell-content {
+  background-color: #ffcc80 !important;
+  border-radius: 50% !important;
+  color: black !important;
+  font-weight: bold !important;
+}
