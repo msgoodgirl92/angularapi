@@ -260,14 +260,45 @@ input[type="text"] {
   font-weight: bold;
 }
 .highlighted-date {
-  background-color: #ffcc80 !important;
+  background-color: #80bbff !important;
   border-radius: 50% !important;
   color: black !important;
   font-weight: bold !important;
 }
 .mat-calendar-body-cell.highlighted-date .mat-calendar-body-cell-content {
-  background-color: #ffcc80 !important;
+  background-color: #80bbff !important;
   border-radius: 50% !important;
   color: black !important;
   font-weight: bold !important;
+}
+
+/* Highlighted dates styling */
+::ng-deep .mat-calendar-body-cell.highlighted-date .mat-calendar-body-cell-content {
+  background-color: #80bbff !important;
+  border-radius: 50% !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+
+::ng-deep .mat-calendar-body-cell.highlighted-date:hover .mat-calendar-body-cell-content {
+  background-color: #80bbff !important;
+}
+
+::ng-deep .mat-calendar-body-cell.highlighted-date .mat-calendar-body-cell-content.mat-calendar-body-selected {
+  background-color: #80bbff !important;
+  color: white !important;
+}
+
+::ng-deep .mat-calendar-body-cell.highlighted-date .mat-calendar-body-cell-content.mat-calendar-body-today {
+  border-color: #80bbff !important;
+}
+
+.language-switcher {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.language-switcher button {
+  margin: 0 5px;
 }

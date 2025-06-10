@@ -34,6 +34,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/angularApi2/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

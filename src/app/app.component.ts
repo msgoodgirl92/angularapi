@@ -55,19 +55,18 @@ export class AppComponent implements OnInit {
 
  highlightedDates: Date[] = []; // Popuni sa datumima iz baze
 dateClass = (d: Date): string => {
-  const date = new Date(d.getFullYear(), d.getMonth(), d.getDate()); // resetuj na ponoć lokalno
+  if (!d) return '';
 
-  console.log('Date from picker:', date.getTime());
+  // Create date at midnight in local timezone
+  const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
-  let isHighlighted = false;
-
-  this.highlightedDates.forEach(h => {
+  // Check if this date exists in highlightedDates
+  const isHighlighted = this.highlightedDates.some(h => {
     const normalizedH = new Date(h.getFullYear(), h.getMonth(), h.getDate());
-    const equal = normalizedH.getTime() === date.getTime();
-    console.log('Date from highlighted:', normalizedH.getTime(), 'Equal:', equal);
-    if (equal) isHighlighted = true;
+    return normalizedH.getTime() === date.getTime();
   });
 
+  console.log('Checking date:', date, 'Is highlighted:', isHighlighted);
   return isHighlighted ? 'highlighted-date' : '';
 };
 
@@ -212,39 +211,33 @@ constructor(private http: HttpClient, private dialog: MatDialog, private userSer
   }
 
   formatDateForComparison(input: any): string {
-  let dateObj: Date;
+    let dateObj: Date;
 
-  if (typeof input === 'string') {
-    if (input.includes('.')) {
-      // Format: DD.MM.YYYY
-      const parts = input.split('.');
-      if (parts.length === 3) {
-        const day = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1;
-        const year = parseInt(parts[2], 10);
-        dateObj = new Date(year, month, day);
+    if (typeof input === 'string') {
+      // Handle ISO format (YYYY-MM-DD)
+      const [year, month, day] = input.split('-').map(Number);
+      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+        dateObj = new Date(year, month - 1, day);
       } else {
         return '';
       }
+    } else if (input instanceof Date) {
+      dateObj = new Date(
+        input.getFullYear(),
+        input.getMonth(),
+        input.getDate()
+      );
     } else {
-      dateObj = new Date(input);
+      return '';
     }
-  } else if (input instanceof Date) {
-    dateObj = input;
-  } else {
-    return '';
-  }
 
-  if (isNaN(dateObj.getTime())) {
-    return '';
-  }
+    if (isNaN(dateObj.getTime())) {
+      return '';
+    }
 
-  // Vraćamo kao ISO bez vremena: YYYY-MM-DD
-  const year = dateObj.getFullYear();
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-  const day = dateObj.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+    // Return date in YYYY-MM-DD format
+    return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+  }
 
 
     changeLanguage(lang: 'sr' | 'en'): void {
@@ -505,40 +498,51 @@ applyFilters(): void {
 
 
 updateHighlightedDates(): void {
+  // Create a Set to store unique dates
+  const uniqueDates = new Set<string>();
+
   this.highlightedDates = this.boeData
     .map((item) => {
       let dateObj: Date;
 
       if (typeof item.datumPrijema === 'string') {
-        if (item.datumPrijema.includes('.')) {
-          // Format: DD.MM.YYYY
-          const parts = item.datumPrijema.split('.');
-          if (parts.length === 3) {
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10) - 1; // meseci su 0-indeksirani
-            const year = parseInt(parts[2], 10);
-            dateObj = new Date(year, month, day);
-          } else {
-            return null; // Nevažeći format
-          }
+        // Handle ISO format (YYYY-MM-DD)
+        const [year, month, day] = item.datumPrijema.split('-').map(Number);
+        if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+          // Create date at midnight in local timezone
+          dateObj = new Date(year, month - 1, day);
         } else {
-          dateObj = new Date(item.datumPrijema); // ISO string
+          return null;
         }
+      } else if (item.datumPrijema instanceof Date) {
+        // If it's already a Date object, create new date at midnight
+        dateObj = new Date(
+          item.datumPrijema.getFullYear(),
+          item.datumPrijema.getMonth(),
+          item.datumPrijema.getDate()
+        );
       } else {
-        dateObj = new Date(item.datumPrijema); // već Date objekat
+        return null;
       }
 
-      // Provera validnosti datuma
       if (isNaN(dateObj.getTime())) {
         return null;
       }
 
-      // Normalizuj na ponoć (bez vremenske komponente)
-      return new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
-    })
-    .filter((date): date is Date => date !== null); // Ukloni null vrednosti
+      // Create a unique key for the date (YYYY-MM-DD format)
+      const dateKey = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
 
-  console.log('Highlighted dates updated:', this.highlightedDates);
+      // Only add if we haven't seen this date before
+      if (!uniqueDates.has(dateKey)) {
+        uniqueDates.add(dateKey);
+        return dateObj;
+      }
+
+      return null;
+    })
+    .filter((date): date is Date => date !== null);
+
+  console.log('Highlighted dates updated:', this.highlightedDates.map(d => d.toISOString()));
 }
 
 
@@ -663,20 +667,33 @@ resetForm(): void {
 downloadAsPDF(item: any): void {
   const doc = new jsPDF();
 
-  doc.text('Detalji menice', 14, 15);
+  // Use translated title based on current language
+  doc.text(this.t('title'), 14, 15);
+
+  // Get translated labels
+  const labels = {
+    id: this.t('idLabel'),
+    serialNumber: this.t('serialNumberLabel'),
+    creditor: this.t('Creditor'),
+    debtor: this.t('Debtor'),
+    dateReceived: this.t('dateLabel'),
+    issueDate: this.t('issueDateLabel'),
+    employee: this.t('employeeLabel'),
+    rejectionReason: this.t('rejectionLabel')
+  };
 
   autoTable(doc, {
     startY: 25,
-    head: [['Naziv', 'Vrednost']],
+    head: [[this.t('idLabel'), this.t('serialNumberLabel')]],
     body: [
-      ['ID', item.ID],
-      ['Serijski broj', item.serijskibroj],
-      ['Poverilac', item.poverilac],
-      ['Dužnik', item.duznik],
-      ['Datum prijema', item.datumPrijema],
-      ['Datum izdavanja', item.datumIzdavanja],
-      ['Zaposleni', item.createdBy],
-      ['Razlog odbijanja', item.rejectionReason || '-'],
+      [labels.id, item.ID],
+      [labels.serialNumber, item.serijskibroj],
+      [labels.creditor, item.poverilac],
+      [labels.debtor, item.duznik],
+      [labels.dateReceived, item.datumPrijema],
+      [labels.issueDate, item.datumIzdavanja],
+      [labels.employee, item.createdBy],
+      [labels.rejectionReason, item.rejectionReason ? this.translateRejectionReason(item.rejectionReason) : '-'],
     ],
   });
 
@@ -684,36 +701,39 @@ downloadAsPDF(item: any): void {
   const pageWidth = doc.internal.pageSize.getWidth();
   const margin = 14;
 
-  const lineY = finalY + 30; // y pozicija linija
-  const textOffsetY = 7;     // koliko ispod linije se stavlja tekst
-  const lineLength = (pageWidth - 2 * margin) / 2 - 20; // duzina svake linije (sa malo razmaka)
+  const lineY = finalY + 30;
+  const textOffsetY = 7;
+  const lineLength = (pageWidth - 2 * margin) / 2 - 20;
 
-  // LEVA linija
+  // Left line
   const leftLineStartX = margin;
   const leftLineEndX = leftLineStartX + lineLength;
   doc.line(leftLineStartX, lineY, leftLineEndX, lineY);
 
-  // TEKST ispod LEVE linije (centar linije)
-  const leftText = 'Potpis klijenta';
+  // Left text (Client signature)
+  const leftText = this.t('signatureClient');
   const leftTextWidth = doc.getTextWidth(leftText);
   const leftTextX = leftLineStartX + (lineLength / 2) - (leftTextWidth / 2);
   const leftTextY = lineY + textOffsetY;
   doc.setFontSize(10);
   doc.text(leftText, leftTextX, leftTextY);
 
-  // DESNA linija
+  // Right line
   const rightLineEndX = pageWidth - margin;
   const rightLineStartX = rightLineEndX - lineLength;
   doc.line(rightLineStartX, lineY, rightLineEndX, lineY);
 
-  const rightText = 'Potpis ovlascenog lica banke';
+  // Right text (Bank signature)
+  const rightText = this.t('signatureBank');
   const rightTextWidth = doc.getTextWidth(rightText);
   const rightTextX = rightLineStartX + (lineLength / 2) - (rightTextWidth / 2);
   const rightTextY = lineY + textOffsetY;
   doc.setFontSize(10);
-doc.text(rightText, rightTextX, rightTextY);
+  doc.text(rightText, rightTextX, rightTextY);
 
-  doc.save(`menica_${item.ID}.pdf`);
+  // Use translated filename based on current language
+  const filename = this.currentLang === 'en' ? `bill_of_exchange_${item.ID}.pdf` : `menica_${item.ID}.pdf`;
+  doc.save(filename);
 }
 
 
