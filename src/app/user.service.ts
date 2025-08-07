@@ -32,7 +32,8 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getEmployees(): Observable<Employee[]> {
-    return this.http.get<EmployeeRaw[]>(this.employeeUrl).pipe(
+    const params = new HttpParams().set('type', '0');
+    return this.http.get<EmployeeRaw[]>(`${this.baseUrl}/HBSharedAPI/BillOfExchangeRecordsAPI/GetDD`, { params }).pipe(
       map(rawList => rawList.map(raw => {
         const [firstName, ...lastNameParts] = raw.radnik.split(' ');
         return {
@@ -45,7 +46,8 @@ export class UserService {
   }
 
   getRejectionReasons(): Observable<RejectionReason[]> {
-    return this.http.get<RejectionReason[]>(this.rejectionUrl);
+    const params = new HttpParams().set('type', '1');
+    return this.http.get<RejectionReason[]>(`${this.baseUrl}/HBSharedAPI/BillOfExchangeRecordsAPI/GetDD`, { params });
   }
 
   getBOERecords(): Observable<any[]> {
