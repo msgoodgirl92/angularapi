@@ -100,7 +100,7 @@ idControl = new FormControl('');
   translations: { [lang: string]: Translations } = {
     sr: {
       title: 'Odbijene menice',
-      filterMessage: 'Molimo izaberite jedan od filtera i kliknite na dugme "Filtiraj podatke" da biste videli podatke.',
+      filterMessage: 'Molimo izaberite    JEDAN    od filtera i kliknite na dugme "Filtiraj podatke" da biste videli podatke.',
       idLabel: 'ID',
       idPlaceholder: 'Unesite ID broj od 1-10',
       rejectionLabel: 'Razlog odbijanja',
